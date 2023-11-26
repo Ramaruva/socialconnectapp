@@ -12,11 +12,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { signUpValidations } from '@/lib/validation'
 import * as z from "zod"
+import Loader from '@/components/shared/Loader'
+import { Link } from 'react-router-dom'
 
 
 
 const SignUpForm = () => {
-  
+  const isLoading=false;
   const form = useForm<z.infer<typeof signUpValidations>>({
     resolver: zodResolver(signUpValidations),
     defaultValues: {
@@ -40,7 +42,7 @@ const SignUpForm = () => {
           src='/assets/images/logo.svg'
         />
         <h2 className='h3-bold md:h2-bold pt-5 sm:pt-12'>Create New Account</h2>
-        <p className='text-light-3 small-medium md:base-regular'>To use Connect  Enter your Details</p>
+        <p className='text-light-3 small-medium md:base-regular'>To use Connect, Please Enter your Details</p>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex  flex-col gap-5 w-full mt-4">
           <FormField
@@ -95,7 +97,20 @@ const SignUpForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className='shad-button_primary'>Submit</Button>
+          <Button type="submit" className='shad-button_primary'>
+            {
+              isLoading ? 
+              (<div className='flex-center gap-2'>
+               <Loader/>
+              </div>):
+              (
+                "Sign up"
+              )
+            }
+          </Button>
+          <p className='text-small-regular text-light-2 text-center mt-2'>
+              Already have an account? <Link to='/sign-in' className='text-primary-500 text-small-semibold ml-1'>Sign In</Link>
+          </p>
         </form>
       </div>
     </Form>
