@@ -17,11 +17,15 @@ import { Input } from "@/components/ui/input"
 import { signUpValidation } from '@/lib/validation'
 import Loader from '@/components/shared/Loader'
 import { Link } from 'react-router-dom'
+import { createUserAccount } from '@/lib/appwrite/api'
+import { useToast } from '@/components/ui/use-toast'
 
 
 
 
 const SignupForm = () => {
+
+  const {toast} = useToast();
   const isLoading = false;
   // 1. Define your form.
   const form = useForm<z.infer<typeof signUpValidation>>({
@@ -35,10 +39,15 @@ const SignupForm = () => {
   })
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof signUpValidation>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+ async function onSubmit(values: z.infer<typeof signUpValidation>) {
+       const user = await createUserAccount(values);
+       if(!user){
+        return toast({
+          title:"Sign up Failed please try again"
+        });
+      //        const session = await 
+       }
+       console.log(user);
   }
   return (
 
@@ -79,7 +88,7 @@ const SignupForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>name</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input type='text' className='shad-input' {...field} />
                 </FormControl>
@@ -93,7 +102,7 @@ const SignupForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>name</FormLabel>
+                <FormLabel>Password</FormLabel>
                 <FormControl>
                   <Input type='password' className='shad-input' {...field} />
                 </FormControl>
